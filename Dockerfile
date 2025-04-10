@@ -29,6 +29,12 @@ RUN npx puppeteer browsers install chrome@114.0.5735.90
 COPY . /data
 WORKDIR /data
 
+# Cài pnpm cho root (giữ nguyên nếu chưa có)
+RUN corepack enable && corepack prepare pnpm@latest --activate
+
+# Sao chép pnpm vào thư mục của user node (cho phép dùng khi USER node)
+RUN cp $(which pnpm) /usr/local/bin/pnpm
+
 # ✅ Sửa quyền thư mục
 RUN chown -R node:node /data
 
