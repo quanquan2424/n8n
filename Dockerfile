@@ -1,9 +1,7 @@
 FROM n8nio/n8n:latest
 
-# 🔐 Sử dụng quyền root để cài puppeteer + dependencies
 USER root
 
-# 🧩 Cài thêm thư viện hệ thống để chạy Chromium trong Puppeteer
 RUN apk update && apk add --no-cache \
     wget \
     ca-certificates \
@@ -23,24 +21,23 @@ RUN apk update && apk add --no-cache \
     libxfixes \
     libc6-compat
 
-# 🧠 Cài puppeteer phiên bản cụ thể
-RUN npm install -g puppeteer@19.11.1
+# ✅ Cài pnpm vào global để user node có thể dùng được
+RUN npm install -g pnpm
 
-# 📦 Cài thêm Chromium dùng riêng cho Puppeteer
+# ✅ Cài puppeteer và browser
+RUN npm install -g puppeteer@19.11.1
 RUN npx puppeteer browsers install chrome@114.0.5735.90
 
-# 📁 Copy source project vào image
 COPY . /data
 WORKDIR /data
 
-# 📦 Cài đặt dependencies từ repo n8n đã clone
+# ✅ Sửa quyền thư mục
+RUN chown -R node:node /data
+
 RUN pnpm install --ignore-scripts
 
-# 📂 Set thư mục user cho n8n
+# ✅ Đảm bảo đúng user và folder
+USER node
 ENV N8N_USER_FOLDER=/data
 
-# 👤 Trả quyền lại cho user node để chạy app an toàn
-USER node
-
-# 🚀 Lệnh chạy n8n
 CMD ["pnpm", "start"]
