@@ -1,24 +1,20 @@
 services:
   - type: web
-    name: n8n-service
-    runtime: image
-    image:
-      url: hieuncdev/n8n-puppeteer:latest
+    name: n8n-puppeteer
+    env: docker
+    image: quanquanhoang/n8n-puppeteer:latest
     plan: starter
+    autoDeploy: false
     envVars:
+      - key: N8N_BASIC_AUTH_ACTIVE
+        value: "true"
+      - key: N8N_BASIC_AUTH_USER
+        value: admin
+      - key: N8N_BASIC_AUTH_PASSWORD
+        value: KiemTien$$$999
       - key: N8N_HOST
-        value: n8n-service-5sd4.onrender.com
-      - key: N8N_PROTOCOL
-        value: https
-      - key: WEBHOOK_URL
-        value: https://n8n-service-5sd4.onrender.com/webhook
-      - key: N8N_ENDPOINT_WEBHOOK
-        value: webhook
+        value: n8n-puppeteer.onrender.com
       - key: N8N_PORT
-        value: 443
-      - key: PUPPETEER_EXECUTABLE_PATH
-        value: /root/.cache/puppeteer/chrome/linux-114.0.5735.90/chrome-linux/chrome
-      - key: PUPPETEER_CACHE_DIR
-        value: /tmp/puppeteer
-      - key: NODE_ENV
-        value: production
+        value: 5678
+      - key: WEBHOOK_TUNNEL_URL
+        value: https://n8n-puppeteer.onrender.com
