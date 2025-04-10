@@ -4,7 +4,7 @@ services:
     env: docker
     plan: starter
     autoDeploy: true
-    dockerfilePath: ./Dockerfile
+    image: quanquanhoang/n8n-puppeteer:latest
     envVars:
       - key: N8N_HOST
         value: n8n-service-5sd4.onrender.com
@@ -16,5 +16,5 @@ services:
         value: webhook
       - key: N8N_ENDPOINT_WEBHOOK_TEST
         value: webhook-test
-      - key: WEBHOOK_URL
-        value: https://n8n-service-<your-slug>.onrender.com/webhook
+      - key: WEBHOOK_TUNNEL_URL
+        value: https://n8n-service-5sd4.onrender.com/webhook
