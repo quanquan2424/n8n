@@ -21,8 +21,6 @@ RUN apk update && apk add --no-cache \
     libxfixes \
     libc6-compat
 
-# ✅ Cài pnpm vào global để user node có thể dùng được
-RUN npm install -g pnpm
 
 # ✅ Cài puppeteer và browser
 RUN npm install -g puppeteer@19.11.1
