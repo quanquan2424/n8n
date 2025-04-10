@@ -7,7 +7,7 @@ services:
     dockerfilePath: ./Dockerfile
     envVars:
       - key: N8N_HOST
-        value: n8n-service-<your-slug>.onrender.com
+        value: n8n-service-5sd4.onrender.com
       - key: N8N_PORT
         value: 443
       - key: N8N_PROTOCOL
