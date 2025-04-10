@@ -21,7 +21,6 @@ RUN apk update && apk add --no-cache \
     libxfixes \
     libc6-compat
 
-
 # ✅ Cài puppeteer và browser
 RUN npm install -g puppeteer@19.11.1
 RUN npx puppeteer browsers install chrome@114.0.5735.90
@@ -29,18 +28,14 @@ RUN npx puppeteer browsers install chrome@114.0.5735.90
 COPY . /data
 WORKDIR /data
 
-# Cài pnpm cho root (giữ nguyên nếu chưa có)
-RUN corepack enable && corepack prepare pnpm@latest --activate
-
-# Sao chép pnpm vào thư mục của user node (cho phép dùng khi USER node)
-RUN cp $(which pnpm) /usr/local/bin/pnpm
+# ✅ Cài pnpm trực tiếp, không dùng corepack
+RUN npm install -g pnpm
 
 # ✅ Sửa quyền thư mục
 RUN chown -R node:node /data
 
 RUN pnpm install --ignore-scripts
 
-# ✅ Đảm bảo đúng user và folder
 USER node
 ENV N8N_USER_FOLDER=/data
 
