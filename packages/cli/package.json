@@ -174,5 +174,10 @@
     "xss": "catalog:",
     "yamljs": "0.3.0",
     "zod": "catalog:"
+},
+"n8n": {
+  "communityNodes": [
+    "n8n-nodes-puppeteer"
+  ]
   }
 }

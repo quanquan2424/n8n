@@ -105,5 +105,8 @@
       "vue-tsc@2.2.8": "patches/vue-tsc@2.2.8.patch",
       "eslint-plugin-n8n-local-rules": "patches/eslint-plugin-n8n-local-rules.patch"
     }
+  },
+  "dependencies": {
+    "n8n-nodes-puppeteer": "^1.4.1"
   }
 }
