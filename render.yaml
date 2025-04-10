@@ -18,5 +18,11 @@ services:
         value: webhook-test
       - key: WEBHOOK_TUNNEL_URL
         value: https://n8n-service-5sd4.onrender.com/webhook
-				 - key: N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS
+      - key: N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS
         value: "true"
+      - key: N8N_BASIC_AUTH_ACTIVE
+        value: "true"
+      - key: N8N_BASIC_AUTH_USER
+        value: admin
+      - key: N8N_BASIC_AUTH_PASSWORD
+        value: yoursecurepassword
