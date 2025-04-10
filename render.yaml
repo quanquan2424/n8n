@@ -5,14 +5,14 @@ services:
     image:
       url: docker.io/n8nio/n8n:latest
     plan: starter
-		envVars:
-  - key: N8N_HOST
-  		  value: n8n-service-okag.onrender.com
- 	 - key: N8N_PROTOCOL
-   			 value: https
- 	 - key: WEBHOOK_URL
-   			 value: https://n8n-service-okag.onrender.com/webhook
-  	- key: N8N_ENDPOINT_WEBHOOK
-  		  value: webhook
- 	 - key: N8N_PORT
-   			 value: 443
+    envVars:
+      - key: N8N_HOST
+        value: n8n-service-okag.onrender.com
+      - key: N8N_PROTOCOL
+        value: https
+      - key: WEBHOOK_URL
+        value: https://n8n-service-okag.onrender.com/webhook
+      - key: N8N_ENDPOINT_WEBHOOK
+        value: webhook
+      - key: N8N_PORT
+        value: 443
