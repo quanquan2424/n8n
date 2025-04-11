@@ -3,40 +3,41 @@ FROM n8nio/n8n:latest
 USER root
 
 RUN apk update && apk add --no-cache \
-    wget \
-    ca-certificates \
-    nss \
-    chromium \
-    font-noto \
-    ttf-freefont \
-    nodejs \
-    npm \
-    libstdc++ \
-    harfbuzz \
-    libxcomposite \
-    libxdamage \
-    libxrandr \
-    libx11 \
-    libxext \
-    libxfixes \
-    libc6-compat
+  wget \
+  ca-certificates \
+  nss \
+  chromium \
+  font-noto \
+  ttf-freefont \
+  nodejs \
+  npm \
+  libstdc++ \
+  harfbuzz \
+  libxcomposite \
+  libxdamage \
+  libxrandr \
+  libx11 \
+  libxext \
+  libxfixes \
+  libc6-compat
 
-# ✅ Cài pnpm vào global để user node có thể dùng được
-RUN npm install -g pnpm
-
-# ✅ Cài puppeteer và browser
+# ✅ Cài Puppeteer và Chrome
 RUN npm install -g puppeteer@19.11.1
 RUN npx puppeteer browsers install chrome@114.0.5735.90
+
+# ✅ Cài pnpm & fix quyền sử dụng cho user node
+RUN corepack enable && corepack prepare pnpm@8.15.4 --activate \
+  && ln -sf $(which pnpm) /usr/local/bin/pnpm
 
 COPY . /data
 WORKDIR /data
 
-# ✅ Sửa quyền thư mục
+# ✅ Sửa quyền /data để tránh lỗi EACCES
 RUN chown -R node:node /data
 
+# ✅ Cài dependencies
 RUN pnpm install --ignore-scripts
 
-# ✅ Đảm bảo đúng user và folder
 USER node
 ENV N8N_USER_FOLDER=/data
 
