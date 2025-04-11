@@ -3,7 +3,7 @@ FROM n8nio/n8n:latest
 # ✅ Switch sang root để cài gói
 USER root
 
-# ✅ Cài các dependency bắt buộc cho Puppeteer, Chrome, n8n
+# ✅ Cài các dependency cho Puppeteer + Chrome + n8n
 RUN apk update && apk add --no-cache \
     wget \
     ca-certificates \
@@ -25,27 +25,27 @@ RUN apk update && apk add --no-cache \
     nodejs \
     npm
 
-# ✅ Cài đúng bản Puppeteer, ngăn nó tự nâng cấp Chrome
+# ✅ Ngăn Puppeteer tự tải Chrome mới + chỉ định bản cần thiết
 ENV PUPPETEER_SKIP_DOWNLOAD=true
 RUN npm install -g puppeteer@19.11.1
 
-# ✅ Cài đúng bản Chrome 114
+# ✅ Cài đúng Chrome v114 tương thích với Puppeteer 19
 RUN npx puppeteer browsers install chrome@114.0.5735.90
 
-# ✅ Cài pnpm bản tương thích, đảm bảo PATH đúng
+# ✅ Cài pnpm tương thích
 RUN corepack enable && corepack prepare pnpm@10.2.1 --activate
 
 # ✅ Copy source code
 COPY . /data
 WORKDIR /data
 
-# ✅ Phân quyền chính xác để tránh lỗi permission
+# ✅ Phân quyền thư mục
 RUN chown -R node:node /data
 
-# ✅ Cài dependencies dưới quyền root để tránh lỗi quyền
+# ✅ Cài dependencies với root để tránh lỗi
 RUN pnpm install --ignore-scripts --shamefully-hoist
 
-# ✅ Dùng đúng user n8n yêu cầu
+# ✅ Switch về user node cho n8n
 USER node
 ENV N8N_USER_FOLDER=/data
 
