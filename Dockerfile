@@ -1,8 +1,9 @@
 FROM n8nio/n8n:latest
 
+# ✅ Switch sang root để cài gói
 USER root
 
-# ✅ Cài đặt các gói cần thiết để hỗ trợ Chrome / Puppeteer
+# ✅ Cài các dependency bắt buộc cho Puppeteer, Chrome, n8n
 RUN apk update && apk add --no-cache \
     wget \
     ca-certificates \
@@ -10,8 +11,6 @@ RUN apk update && apk add --no-cache \
     chromium \
     font-noto \
     ttf-freefont \
-    nodejs \
-    npm \
     libstdc++ \
     harfbuzz \
     libxcomposite \
@@ -20,33 +19,35 @@ RUN apk update && apk add --no-cache \
     libx11 \
     libxext \
     libxfixes \
-    libc6-compat
+    libc6-compat \
+    bash \
+    curl \
+    nodejs \
+    npm
 
-# ✅ Cài đặt Puppeteer (bản cũ để tương thích với n8n node tùy chỉnh)
+# ✅ Cài đúng bản Puppeteer, ngăn nó tự nâng cấp Chrome
+ENV PUPPETEER_SKIP_DOWNLOAD=true
 RUN npm install -g puppeteer@19.11.1
 
-# ✅ Cài Chrome phiên bản tương thích với Puppeteer
+# ✅ Cài đúng bản Chrome 114
 RUN npx puppeteer browsers install chrome@114.0.5735.90
 
-# ✅ Cài pnpm trực tiếp qua npm (không dùng corepack, tránh lỗi)
-RUN npm install -g pnpm@10.8.0 --force
+# ✅ Cài pnpm bản tương thích, đảm bảo PATH đúng
+RUN corepack enable && corepack prepare pnpm@10.2.1 --activate
 
-# ✅ Kiểm tra phiên bản sau khi cài xong
-RUN node -v && npm -v && pnpm -v
-
-# ✅ Copy source vào container
+# ✅ Copy source code
 COPY . /data
 WORKDIR /data
 
-# ✅ Sửa quyền thư mục để user `node` truy cập được
+# ✅ Phân quyền chính xác để tránh lỗi permission
 RUN chown -R node:node /data
 
-# ✅ Cài dependencies bằng pnpm (sau khi đã đổi quyền)
-RUN pnpm install --ignore-scripts
+# ✅ Cài dependencies dưới quyền root để tránh lỗi quyền
+RUN pnpm install --ignore-scripts --shamefully-hoist
 
-# ✅ Chạy với user node để an toàn
+# ✅ Dùng đúng user n8n yêu cầu
 USER node
 ENV N8N_USER_FOLDER=/data
 
-# ✅ Khởi chạy n8n bằng pnpm
+# ✅ Khởi chạy n8n custom
 CMD ["pnpm", "start"]
